@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Cosinuss.Interfaces
 {
-    interface ICosinussDeviceManager
+    public interface ICosinussDeviceManager
     {
         event EventHandler<ICosinussDevice> OnDeviceFound;
 
