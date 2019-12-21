@@ -29,6 +29,7 @@ _PLEASE NOTE THAT YOU HAVE TO REQUEST THESE PERMISSIONS USING [Activity.RequestP
 ```
 
 **iOS**
+
 To use the cosinuss device as a background BLE periperhal, add the following to your Info.plist
 
 ```xml
