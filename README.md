@@ -1,4 +1,4 @@
-﻿# cosinuss° Sensor Library
+﻿# cosinuss° One Sensor Library
 Third-party .NET library to read raw sensor data from the cosinuss° Bluetooth earables.
 
 ## Supported Platforms
