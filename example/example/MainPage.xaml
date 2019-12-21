@@ -5,12 +5,86 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="example.MainPage">
+    <StackLayout Padding="20" Spacing="10">
+        <StackLayout Orientation="Horizontal" Padding="10" BackgroundColor="LightGreen"  Spacing="10">
+            <StackLayout HorizontalOptions="Start">
+                <Label x:Name="DeviceTypeLabel" Text="DISCONNECTED" FontAttributes="Bold" FontSize="Medium"></Label>
+                <Label x:Name="DeviceIdLabel" Text="-" FontSize="Micro"></Label>
+            </StackLayout>
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
+            <StackLayout HorizontalOptions="CenterAndExpand">
+                <Label HorizontalOptions="Center" Text="Battery" FontAttributes="Bold" FontSize="Medium"></Label>
+                <Label x:Name="BatteryPercentageLabel" HorizontalOptions="Center" Text="-" FontSize="Micro"></Label>
+            </StackLayout>
+
+            <StackLayout HorizontalOptions="End" >
+                <Label HorizontalOptions="End" Text="SW (FW)" FontAttributes="Bold" FontSize="Medium"></Label>
+                <Label x:Name="SoftwareAndFirmwareLabel" HorizontalOptions="End" Text="-" FontSize="Micro"></Label>
+            </StackLayout>
+        </StackLayout>
+        
+        <StackLayout Orientation="Horizontal" BackgroundColor="LightGray" Padding="10" Spacing="10">
+            <BoxView BackgroundColor="Gray">
+            </BoxView>
+            <StackLayout>
+                <Label Text="Body Temperature" FontAttributes="Bold" FontSize="Medium"></Label>
+                <Label Text="°C" FontSize="Micro"></Label>
+            </StackLayout>
+            <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
+                <Label Text="32.2°" FontAttributes="Bold" FontSize="Title"></Label>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" BackgroundColor="LightGray" Padding="10" Spacing="10">
+            <BoxView BackgroundColor="Gray">
+            </BoxView>
+            <StackLayout>
+                <Label Text="Heart Rate" FontAttributes="Bold" FontSize="Medium"></Label>
+                <Label Text="bpm" FontSize="Micro"></Label>
+            </StackLayout>
+            <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
+                <Label Text="61" FontAttributes="Bold" FontSize="Title"></Label>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" BackgroundColor="LightGray" Padding="10" Spacing="10">
+            <BoxView BackgroundColor="Gray">
+            </BoxView>
+            <StackLayout>
+                <Label Text="Accelerometer" FontAttributes="Bold" FontSize="Medium"></Label>
+                <Label Text="g" FontSize="Micro"></Label>
+            </StackLayout>
+            <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
+                <Label Text="1.0" FontAttributes="Bold" FontSize="Title"></Label>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" BackgroundColor="LightGray" Padding="10" Spacing="10">
+            <BoxView BackgroundColor="Gray">
+            </BoxView>
+            <StackLayout>
+                <Label Text="Data Quality Index" FontAttributes="Bold" FontSize="Medium"></Label>
+                <Label Text="%" FontSize="Micro"></Label>
+            </StackLayout>
+            <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
+                <Label Text="65" FontAttributes="Bold" FontSize="Title"></Label>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" BackgroundColor="LightGray" Padding="10" Spacing="10">
+            <BoxView BackgroundColor="Gray">
+            </BoxView>
+            <StackLayout>
+                <Label Text="Duration" FontAttributes="Bold" FontSize="Medium"></Label>
+                <Label Text="MM:SS" FontSize="Micro"></Label>
+            </StackLayout>
+            <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
+                <Label Text="01:31" FontAttributes="Bold" FontSize="Title"></Label>
+            </StackLayout>
+        </StackLayout>
+
+        <Button Text="DISCONNECT" BackgroundColor="Black" TextColor="White" VerticalOptions="EndAndExpand"></Button>
+
     </StackLayout>
 
 </ContentPage>

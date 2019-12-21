@@ -1,4 +1,5 @@
-﻿using Plugin.Permissions;
+﻿using Cosinuss.Interfaces;
+using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,6 @@ using Xamarin.Forms;
 
 namespace example
 {
-    // Learn more about making custom code visible in the Xamarin.Forms previewer
-    // by visiting https://aka.ms/xamarinforms-previewer
-    [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
         private const string ON_RATIONALE_TITLE = "Location Permission Required";
@@ -49,11 +47,7 @@ namespace example
                 if (status == PermissionStatus.Granted)
                 {
                     Cosinuss.CrossCosinuss.Current.OnDeviceFound += Current_OnDeviceFound;
-
-                    Device.InvokeOnMainThreadAsync(() =>
-                    {
-                        Cosinuss.CrossCosinuss.Current.StartScanningForDevices();
-                    }).ConfigureAwait(false);
+                    Cosinuss.CrossCosinuss.Current.StartScanningForDevices();
                 }
                 else if (status != PermissionStatus.Unknown)
                 {
@@ -63,13 +57,80 @@ namespace example
             } 
             catch (Exception e)
             {
-                // something went wrong
+                Console.WriteLine(e.ToString());
             }
         }
 
         private void Current_OnDeviceFound(object sender, Cosinuss.Interfaces.ICosinussDevice e)
         {
+            // stop scanning after any cosinuss device was found
+            Cosinuss.CrossCosinuss.Current.OnDeviceFound -= Current_OnDeviceFound;
             Cosinuss.CrossCosinuss.Current.StopScanningForDevices();
+
+            // connect to the cosinuss device
+            e.OnConnectionStateChanged += E_OnConnectionStateChanged;
+            e.Connect();
+            
+        }
+
+        private void E_OnConnectionStateChanged(object sender, Cosinuss.ConnectionState e)
+        {
+            // TODO: ensure sender type safety
+            var cosinussDevice = (ICosinussDevice)sender;
+
+            if (e == Cosinuss.ConnectionState.CONNECTED)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    this.DeviceIdLabel.Text = cosinussDevice.Id;
+                    this.DeviceTypeLabel.Text = cosinussDevice.ManufacturerName + " " + cosinussDevice.ModelNumber;
+                    this.SoftwareAndFirmwareLabel.Text = cosinussDevice.SoftwareRevision + " (" + cosinussDevice.FirmwareRevision + ")";
+                });
+
+                cosinussDevice.BatteryLevelChanged += E_BatteryLevelChanged;
+                cosinussDevice.DataQualityIndexChanged += E_DataQualityIndexChanged;
+                
+                cosinussDevice.BodyTemperatureChanged += E_BodyTemperatureChanged;
+                cosinussDevice.HeartRateChanged += E_HeartRateChanged;
+                cosinussDevice.AccelerometerChanged += E_AccelerometerChanged;
+            }
+            else if (e == Cosinuss.ConnectionState.DISCONNECTED)
+            {
+                cosinussDevice.BatteryLevelChanged -= E_BatteryLevelChanged;
+                cosinussDevice.DataQualityIndexChanged -= E_DataQualityIndexChanged;
+
+                cosinussDevice.BodyTemperatureChanged -= E_BodyTemperatureChanged;
+                cosinussDevice.HeartRateChanged -= E_HeartRateChanged;
+                cosinussDevice.AccelerometerChanged -= E_AccelerometerChanged;
+            }
+        }
+
+        private void E_BatteryLevelChanged(object sender, int e)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                BatteryPercentageLabel.Text = e + "%";
+            });
+        }
+
+        private void E_AccelerometerChanged(object sender, Cosinuss.Accelerometer e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void E_BodyTemperatureChanged(object sender, float e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void E_DataQualityIndexChanged(object sender, int e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void E_HeartRateChanged(object sender, float e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

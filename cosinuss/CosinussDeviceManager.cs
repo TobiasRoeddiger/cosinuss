@@ -1,4 +1,5 @@
-﻿using Cosinuss.Interfaces;
+﻿using cosinuss;
+using Cosinuss.Interfaces;
 using Plugin.BluetoothLE;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,10 @@ namespace Cosinuss
     {
         public event EventHandler<ICosinussDevice> OnDeviceFound;
 
+        private const string COSINUSS_DEVICE_NAME = "earconnect";
+
+        private bool _isScanning = false;
+
         public void StartScanningForDevices()
         {
             if (CrossBleAdapter.Current.Status != AdapterStatus.PoweredOn)
@@ -17,21 +22,22 @@ namespace Cosinuss
                 // TODO: throw an exception
             }
 
-            // TODO: scan only for devices with cosinuss services
+            _isScanning = true;
 
             CrossBleAdapter.Current.Scan().Subscribe(scanResult => {
-                if (scanResult.AdvertisementData.LocalName != "earconnect")
+                if (!_isScanning || scanResult.AdvertisementData.LocalName != COSINUSS_DEVICE_NAME)
                 {
-                    return; // if the device name does not match the expected device name of cosinuss devices return immediatly
+                    return; // if the device name does not match the expected name return immediatly
                 }
 
-                OnDeviceFound?.Invoke(this, null);
+                OnDeviceFound?.Invoke(this, new CosinussDevice(scanResult.Device));            
             });
         }
 
         public void StopScanningForDevices()
         {
-            CrossBleAdapter.Current.StopScan();
+            _isScanning = false;
+            CrossBleAdapter.Current.StopScan(); // TODO: somehow this does not seem to work
         }
     }
 }

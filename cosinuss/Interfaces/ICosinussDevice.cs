@@ -10,9 +10,11 @@ namespace Cosinuss.Interfaces
          * DEVICE ATTRIBUTES
          */
         string Id { get; }
+        string ManufacturerName { get; }
         string ModelNumber { get; }
-        string FirmwareRevision { get; }
         string HardwareRevision { get; }
+        string FirmwareRevision { get; }
+        string SoftwareRevision { get; }
 
         ConnectionState ConnectionState { get; }
         event EventHandler<ConnectionState> OnConnectionStateChanged;
