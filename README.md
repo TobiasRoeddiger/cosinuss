@@ -1,5 +1,20 @@
 ﻿# cosinuss° One Library
-Third-party .NET library to read raw sensor data from the cosinuss° Bluetooth earables.
+![Build Passing](https://img.shields.io/badge/build-passing-success)
+![NuGet Release](https://img.shields.io/nuget/v/cosinuss.NET)
+![Open Issues](https://img.shields.io/github/issues/TobiasRoeddiger/cosinuss)
+![Twitter Tobias Röddiger](https://img.shields.io/badge/twitter-%40TobiasRoeddiger-informational)
+
+ 
+Third-party .NET library to read raw sensor data from the cosinuss° One Bluetooth earables (work in progress). NuGet publication pending.
+
+| Feature  | Supported |
+| ------------- | :-------------: |
+| Device Information | ✔️ |
+| Heart Rate  | ✔️  |
+| Body Temperature  | ✔️  |
+| Data Quality Index | ✔️  |
+| Accelerometer | ❌  |
+
 
 ## Supported Platforms
 * .NET Standard
@@ -10,8 +25,6 @@ Third-party .NET library to read raw sensor data from the cosinuss° Bluetooth e
 * UWP
 
 ## Setup
-
-Be sure to install the cosinuss.NET nuget package in your project.
 
 **Android**
 
