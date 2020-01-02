@@ -2,11 +2,6 @@
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace example
@@ -47,13 +42,12 @@ namespace example
                 if (status == PermissionStatus.Granted)
                 {
                     Cosinuss.CrossCosinuss.Current.OnDeviceFound += Current_OnDeviceFound;
-                    Cosinuss.CrossCosinuss.Current.StartScanningForDevices();
+                    Cosinuss.CrossCosinuss.Current.StartScanning();
                 }
                 else if (status != PermissionStatus.Unknown)
                 {
                     //location denied
                 }
-
             } 
             catch (Exception e)
             {
@@ -64,13 +58,12 @@ namespace example
         private void Current_OnDeviceFound(object sender, Cosinuss.Interfaces.ICosinussDevice e)
         {
             // stop scanning after any cosinuss device was found
+            Cosinuss.CrossCosinuss.Current.StopScanning();
             Cosinuss.CrossCosinuss.Current.OnDeviceFound -= Current_OnDeviceFound;
-            Cosinuss.CrossCosinuss.Current.StopScanningForDevices();
 
             // connect to the cosinuss device
             e.OnConnectionStateChanged += E_OnConnectionStateChanged;
-            e.Connect();
-            
+            e.Connect();    
         }
 
         private void E_OnConnectionStateChanged(object sender, Cosinuss.ConnectionState e)
@@ -85,14 +78,14 @@ namespace example
                     this.DeviceIdLabel.Text = cosinussDevice.Id;
                     this.DeviceTypeLabel.Text = cosinussDevice.ManufacturerName + " " + cosinussDevice.ModelNumber;
                     this.SoftwareAndFirmwareLabel.Text = cosinussDevice.SoftwareRevision + " (" + cosinussDevice.FirmwareRevision + ")";
-                });
 
-                cosinussDevice.BatteryLevelChanged += E_BatteryLevelChanged;
-                cosinussDevice.DataQualityIndexChanged += E_DataQualityIndexChanged;
-                
-                cosinussDevice.BodyTemperatureChanged += E_BodyTemperatureChanged;
-                cosinussDevice.HeartRateChanged += E_HeartRateChanged;
-                cosinussDevice.AccelerometerChanged += E_AccelerometerChanged;
+                    cosinussDevice.BatteryLevelChanged += E_BatteryLevelChanged;
+                    cosinussDevice.DataQualityIndexChanged += E_DataQualityIndexChanged;
+
+                    cosinussDevice.BodyTemperatureChanged += E_BodyTemperatureChanged;
+                    cosinussDevice.HeartRateChanged += E_HeartRateChanged;
+                    cosinussDevice.AccelerometerChanged += E_AccelerometerChanged;
+                });
             }
             else if (e == Cosinuss.ConnectionState.DISCONNECTED)
             {
@@ -105,7 +98,7 @@ namespace example
             }
         }
 
-        private void E_BatteryLevelChanged(object sender, int e)
+        private void E_BatteryLevelChanged(object sender, short e)
         {
             Device.BeginInvokeOnMainThread(() =>
             {
@@ -115,22 +108,31 @@ namespace example
 
         private void E_AccelerometerChanged(object sender, Cosinuss.Accelerometer e)
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
-        private void E_BodyTemperatureChanged(object sender, float e)
+        private void E_BodyTemperatureChanged(object sender, double e)
         {
-            throw new NotImplementedException();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                BodyTemperatureValueLabel.Text = Math.Round(e, 2) + "°";
+            });
         }
 
-        private void E_DataQualityIndexChanged(object sender, int e)
+        private void E_DataQualityIndexChanged(object sender, byte e)
         {
-            throw new NotImplementedException();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                DataQualityIndexValueLabel.Text = e.ToString();
+            });
         }
 
         private void E_HeartRateChanged(object sender, float e)
         {
-            throw new NotImplementedException();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                HeartRateValueLabel.Text = e.ToString();
+            });
         }
     }
 }

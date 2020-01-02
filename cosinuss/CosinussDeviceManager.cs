@@ -15,7 +15,7 @@ namespace Cosinuss
 
         private bool _isScanning = false;
 
-        public void StartScanningForDevices()
+        public void StartScanning()
         {
             if (CrossBleAdapter.Current.Status != AdapterStatus.PoweredOn)
             {
@@ -30,14 +30,20 @@ namespace Cosinuss
                     return; // if the device name does not match the expected name return immediatly
                 }
 
+                _isScanning = false;
+                CrossBleAdapter.Current.StopScan();
+
                 OnDeviceFound?.Invoke(this, new CosinussDevice(scanResult.Device));            
             });
         }
 
-        public void StopScanningForDevices()
+        public void StopScanning()
         {
+            if (!_isScanning) return;
+
+            CrossBleAdapter.Current.StopScan();
+            while (CrossBleAdapter.Current.IsScanning) { }
             _isScanning = false;
-            CrossBleAdapter.Current.StopScan(); // TODO: somehow this does not seem to work
         }
     }
 }

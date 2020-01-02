@@ -19,17 +19,17 @@ namespace Cosinuss.Interfaces
         ConnectionState ConnectionState { get; }
         event EventHandler<ConnectionState> OnConnectionStateChanged;
 
-        int BatteryLevel { get; }
-        event EventHandler<int> BatteryLevelChanged;
+        short BatteryLevel { get; }
+        event EventHandler<short> BatteryLevelChanged;
 
-        int DataQualityIndex { get; }
-        event EventHandler<int> DataQualityIndexChanged;
+        byte DataQualityIndex { get; }
+        event EventHandler<byte> DataQualityIndexChanged;
 
         /**
          * SENSOR READINGS
          */
-        float BodyTemperature { get; }
-        event EventHandler<float> BodyTemperatureChanged;
+        double BodyTemperature { get; }
+        event EventHandler<double> BodyTemperatureChanged;
 
         float HeartRate { get; }
         event EventHandler<float> HeartRateChanged;

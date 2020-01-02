@@ -8,8 +8,8 @@ namespace Cosinuss.Interfaces
     {
         event EventHandler<ICosinussDevice> OnDeviceFound;
 
-        void StartScanningForDevices();
+        void StartScanning();
 
-        void StopScanningForDevices();
+        void StopScanning();
     }
 }

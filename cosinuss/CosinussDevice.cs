@@ -22,7 +22,8 @@ namespace cosinuss
         private readonly Guid BATTERY_LEVEL_UUID = Guid.Parse("00002a19-0000-1000-8000-00805f9b34fb");
 
         // CONSTANTS - Sensor Readings
-        private readonly Guid HEART_RATE_UUID = Guid.Parse("00002a1c-0000-1000-8000-00805f9b34fb");
+        private readonly Guid DATA_QUALITY_INDEX_UUID = Guid.Parse("0000a002-1212-EFDE-1523-785FEABCD123");
+        private readonly Guid HEART_RATE_UUID = Guid.Parse("00002a37-0000-1000-8000-00805f9b34fb");
         private readonly Guid TEMPERATURE_MEASUREMENT_UUID = Guid.Parse("00002a1c-0000-1000-8000-00805f9b34fb");
         //private readonly Guid HEART_RATE_UUID = Guid.Parse("00002a1c-0000-1000-8000-00805f9b34fb");
 
@@ -34,7 +35,7 @@ namespace cosinuss
             get
             {
                 return _id;
-            } 
+            }
             private set
             {
                 _id = value;
@@ -126,11 +127,10 @@ namespace cosinuss
                 }
             }
         }
-
         public event EventHandler<ConnectionState> OnConnectionStateChanged;
 
-        private int _batteryLevel;
-        public int BatteryLevel { 
+        private short _batteryLevel;
+        public short BatteryLevel {
             get
             {
                 return _batteryLevel;
@@ -144,14 +144,14 @@ namespace cosinuss
                 }
             }
         }
-        public event EventHandler<int> BatteryLevelChanged;
+        public event EventHandler<short> BatteryLevelChanged;
 
-        private int _dataQualityIndex;
-        public int DataQualityIndex
+        private byte _dataQualityIndex;
+        public byte DataQualityIndex
         {
             get
             {
-                return _batteryLevel;
+                return _dataQualityIndex;
             }
             private set
             {
@@ -162,10 +162,10 @@ namespace cosinuss
                 }
             }
         }
-        public event EventHandler<int> DataQualityIndexChanged;
+        public event EventHandler<byte> DataQualityIndexChanged;
 
-        private float _bodyTemperature;
-        public float BodyTemperature
+        private double _bodyTemperature;
+        public double BodyTemperature
         {
             get
             {
@@ -180,12 +180,42 @@ namespace cosinuss
                 }
             }
         }
-        public event EventHandler<float> BodyTemperatureChanged;
+        public event EventHandler<double> BodyTemperatureChanged;
 
-        public float HeartRate => 0.0f;
+        private float _heartRate = 0.0f;
+        public float HeartRate
+        {
+            get
+            {
+                return _heartRate;
+            }
+            private set
+            {
+                if (_heartRate != value)
+                {
+                    _heartRate = value;
+                    HeartRateChanged?.Invoke(this, _heartRate);
+                }
+            }
+        }
         public event EventHandler<float> HeartRateChanged;
 
-        public Accelerometer Accelerometer => null;
+        private Accelerometer _accelerometer = new Accelerometer();
+        public Accelerometer Accelerometer
+        {
+            get
+            {
+                return this._accelerometer;
+            }
+            set
+            {
+                if (_accelerometer != value)
+                {
+                    this._accelerometer = value;
+                    AccelerometerChanged?.Invoke(this, _accelerometer);
+                }
+            }
+        }
         public event EventHandler<Accelerometer> AccelerometerChanged;
 
         /*
@@ -197,6 +227,7 @@ namespace cosinuss
         {
             this._internalDevice = internalDevice;
         }
+
 
         public void Connect()
         {
@@ -223,23 +254,54 @@ namespace cosinuss
                             else if (characteristic.Uuid == this.HARDWARE_REVISION_UUID) characteristic.Read().Subscribe(result => { HardwareRevision = this.BLEByteArrayToString(result.Data); });
                             else if (characteristic.Uuid == this.FIRMWARE_REVISION_UUID) characteristic.Read().Subscribe(result => { FirmwareRevision = this.BLEByteArrayToString(result.Data).Replace('-', '.'); });
                             else if (characteristic.Uuid == this.SOFTWARE_REVISION_UUID) characteristic.Read().Subscribe(result => { SoftwareRevision = this.BLEByteArrayToString(result.Data).Replace('-', '.'); });
-                            else if (characteristic.Uuid == this.BATTERY_LEVEL_UUID) characteristic.Read().Subscribe(result => 
-                            { 
-                                BatteryLevel = BLEByteArrayToInt(result.Data); 
+                            else if (characteristic.Uuid == this.BATTERY_LEVEL_UUID) characteristic.Read().Subscribe(result =>
+                            {
+                                BatteryLevel = BLEByteArrayToByte(result.Data);
                             });
 
-                            if (characteristic.Uuid == this.BATTERY_LEVEL_UUID) {
-                                characteristic.EnableNotifications();
-                                characteristic.WhenNotificationReceived().Subscribe(result =>
+
+                            if (characteristic.Uuid == this.BATTERY_LEVEL_UUID)
+                            {
+                                characteristic.RegisterAndNotify().Subscribe(result =>
                                 {
-                                    BatteryLevel = BLEByteArrayToInt(result.Data);
+                                    BatteryLevel = BLEByteArrayToByte(result.Data);
                                 });
                             }
+                            else if (characteristic.Uuid == this.HEART_RATE_UUID)
+                            {
+                                characteristic.RegisterAndNotify().Subscribe(result =>
+                                {
+                                    ushort bpm = 0;
+                                    if ((result.Data[0] & 0x01) == 0)
+                                    {
+                                        bpm = result.Data[1];
+                                    }
+                                    else
+                                    {
+                                        bpm = result.Data[1];
+                                        bpm = (ushort)(((bpm >> 8) & 0xFF) | ((bpm << 8) & 0xFF00));
+                                    }
 
-                            //if (characteristic.Uuid == this.BATTERY_LEVEL_UUID) characteristic.RegisterAndNotify().Subscribe(result => { BatteryLevel = BLEByteArrayToInt(result.Data); });
-
-                            //if (characteristic.Uuid == this.HEART_RATE_UUID) characteristic.RegisterAndNotify().Subscribe(result => { HeartRate = BLEByteValueToInt(result.Data); });
-                            //if (characteristic.Uuid == this.TEMPERATURE_MEASUREMENT_UUID) characteristic.RegisterAndNotify().Subscribe(result => { BodyTemperature = BLEByteValueToInt(result.Data); });
+                                    HeartRate = bpm;
+                                });
+                            }
+                            else if (characteristic.Uuid == this.TEMPERATURE_MEASUREMENT_UUID)
+                            {
+                                Console.WriteLine("Registering Body Temperature");
+                                characteristic.RegisterAndNotify(true).Subscribe(result =>
+                                {
+                                    Console.WriteLine("Body Temperature");
+                                    BodyTemperature = BLEByteArrayToTemperature(result.Data) / 100d;
+                                });
+                            }
+                            else if (characteristic.Uuid == this.DATA_QUALITY_INDEX_UUID)
+                            {
+                                Console.WriteLine("Registering DQ");
+                                characteristic.RegisterAndNotify().Subscribe(result =>
+                                {
+                                    DataQualityIndex = BLEByteArrayToByte(result.Data);
+                                });
+                            }
                         });
                     });
                 }
@@ -267,10 +329,38 @@ namespace cosinuss
             return (byteArray != null) ? Encoding.Default.GetString(byteArray) : "";
         }
 
-        private int BLEByteArrayToInt(byte[] byteArray)
+        private byte BLEByteArrayToByte(byte[] byteArray)
         {
-            return 100;
-            return (byteArray != null) ? BitConverter.ToInt32(byteArray, 0) : 0;
+            return (byteArray != null) ? (byteArray[0]) : new byte();
+        }
+
+        private short BLEByteArrayToShort(byte[] byteArray)
+        {
+            return (byteArray != null) ? BitConverter.ToInt16(byteArray, 0) : (short)0;
+        }
+
+        private double BLEByteArrayToTemperature(byte[] byteArray)
+        {
+            byte flag = byteArray[0];
+
+            double temperature = TwosComplimentOfNegativeMantissa(((byteArray[3].ToUShort() << 16) | (byteArray[2].ToUShort() << 8) | byteArray[1].ToUShort()) & 16777215);
+
+            if ((flag & 1) != 0)
+            {
+                return ((98.6d * temperature) - 32d) * (5 / 9); // convert Fahrenheit to Celsius
+            }
+
+            return temperature;
+        }
+
+        private int TwosComplimentOfNegativeMantissa(int mantissa)
+        {
+            if ((4194304 & mantissa) != 0)
+            {
+                return (((mantissa ^ -1) & 16777215) + 1) * -1;
+            }
+
+            return mantissa;
         }
 
         private void CheckConnected()
@@ -283,6 +373,18 @@ namespace cosinuss
             {
                 ConnectionState = ConnectionState.CONNECTED;
             }
+        }
+    }
+
+    public static class Conversion
+    {
+        public static ushort ToUShort(this Byte octet)
+        {
+            if (octet < 0)
+            {
+                return (ushort)(octet & 255);
+            }
+            return octet;
         }
     }
 }

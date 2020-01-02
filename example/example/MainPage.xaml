@@ -31,7 +31,7 @@
                 <Label Text="°C" FontSize="Micro"></Label>
             </StackLayout>
             <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
-                <Label Text="32.2°" FontAttributes="Bold" FontSize="Title"></Label>
+                <Label x:Name="BodyTemperatureValueLabel" Text="-" FontAttributes="Bold" FontSize="Title"></Label>
             </StackLayout>
         </StackLayout>
 
@@ -43,7 +43,7 @@
                 <Label Text="bpm" FontSize="Micro"></Label>
             </StackLayout>
             <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
-                <Label Text="61" FontAttributes="Bold" FontSize="Title"></Label>
+                <Label x:Name="HeartRateValueLabel" Text="-" FontAttributes="Bold" FontSize="Title"></Label>
             </StackLayout>
         </StackLayout>
 
@@ -55,7 +55,7 @@
                 <Label Text="g" FontSize="Micro"></Label>
             </StackLayout>
             <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
-                <Label Text="1.0" FontAttributes="Bold" FontSize="Title"></Label>
+                <Label Text="-" FontAttributes="Bold" FontSize="Title"></Label>
             </StackLayout>
         </StackLayout>
 
@@ -67,19 +67,7 @@
                 <Label Text="%" FontSize="Micro"></Label>
             </StackLayout>
             <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
-                <Label Text="65" FontAttributes="Bold" FontSize="Title"></Label>
-            </StackLayout>
-        </StackLayout>
-
-        <StackLayout Orientation="Horizontal" BackgroundColor="LightGray" Padding="10" Spacing="10">
-            <BoxView BackgroundColor="Gray">
-            </BoxView>
-            <StackLayout>
-                <Label Text="Duration" FontAttributes="Bold" FontSize="Medium"></Label>
-                <Label Text="MM:SS" FontSize="Micro"></Label>
-            </StackLayout>
-            <StackLayout VerticalOptions="Center" HorizontalOptions="EndAndExpand">
-                <Label Text="01:31" FontAttributes="Bold" FontSize="Title"></Label>
+                <Label x:Name="DataQualityIndexValueLabel" Text="-" FontAttributes="Bold" FontSize="Title"></Label>
             </StackLayout>
         </StackLayout>
 
