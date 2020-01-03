@@ -16,6 +16,9 @@ Third-party .NET library to read raw sensor data from the cosinuss° One Bluetoo
 | Accelerometer | ❌  |
 | SPO2 | ❌  |
 
+## Sample App
+<img src="https://github.com/TobiasRoeddiger/cosinuss/blob/master/art/screenshot.jpg?raw=true" width="300">
+
 
 ## Supported Platforms
 * .NET Standard
