@@ -9,11 +9,12 @@ Third-party .NET library to read raw sensor data from the cosinuss° One Bluetoo
 
 | Feature  | Supported |
 | ------------- | :-------------: |
-| Device Information | ✔️ |
-| Heart Rate  | ✔️  |
-| Body Temperature  | ✔️  |
-| Data Quality Index | ✔️  |
+| Device Information | ✅  |
+| Heart Rate  |  ✅ |
+| Body Temperature  | ✅  |
+| Sensor Quality Index | ✅  |
 | Accelerometer | ❌  |
+| SPO2 | ❌  |
 
 
 ## Supported Platforms
@@ -29,7 +30,7 @@ Third-party .NET library to read raw sensor data from the cosinuss° One Bluetoo
 **Android**
 
 Add the following to your AndroidManifest.xml
-_PLEASE NOTE THAT YOU HAVE TO REQUEST THESE PERMISSIONS USING [Activity.RequestPermission](https://developer.android.com/training/permissions/requesting)_ or a [Plugin](https://github.com/jamesmontemagno/PermissionsPlugin). The example app includes an implementation for the Permissions Plugin.
+_PLEASE NOTE THAT YOU HAVE TO REQUEST THESE PERMISSIONS USING [Activity.RequestPermission](https://developer.android.com/training/permissions/requesting)_ or a [Plugin](https://github.com/jamesmontemagno/PermissionsPlugin). **The example app includes an implementation for the Permissions Plugin.**
 
 ```xml
 <uses-permission android:name="android.permission.BLUETOOTH"/>
@@ -59,4 +60,39 @@ To use the cosinuss device as a background BLE periperhal, add the following to 
 <!--To add a description to the Bluetooth request message (on iOS 10 this is required!)-->
 <key>NSBluetoothPeripheralUsageDescription</key>
 <string>YOUR CUSTOM MESSAGE</string>
+```
+
+## Usage
+```c#
+// TODO: ensure permissions are granted as shown in the previous section of the README
+
+Cosinuss.Library.Cross.Current.OnDeviceFound += Current_OnDeviceFound;
+Cosinuss.Library.Cross.Current.StartScanning();
+
+void Current_OnDeviceFound(object sender, ICosinussDevice cosinussDevice)
+{
+    // stop scanning before connecting to avoid any issues
+    Cosinuss.Library.Cross.Current.StopScanning();
+    Cosinuss.Library.Cross.Current.OnDeviceFound -= Current_OnDeviceFound; // deregister event handlers
+
+    // connect to the cosinuss device
+    cosinussDevice.OnConnectionStateChanged += CosinussDevice_OnConnectionStateChanged;
+    cosinussDevice.Connect();    
+}
+
+private void CosinussDevice_OnConnectionStateChanged(object sender, ConnectionState e)
+{
+    var cosinussDevice = (ICosinussDevice)sender;
+
+    if (e == ConnectionState.CONNECTED)
+    {
+	cosinussDevice.BatteryLevelChanged += CosinussDevice_BatteryLevelChanged;
+    	cosinussDevice.SensorQualityIndexChanged += CosinussDevice_DataQualityIndexChanged;
+
+    	cosinussDevice.BodyTemperatureChanged += CosinussDevice_BodyTemperatureChanged;
+    	cosinussDevice.HeartRateChanged += CosinussDevice_HeartRateChanged;
+    	cosinussDevice.SPO2Changed += CosinussDevice_SPO2Changed;
+	cosinussDevice.AccelerometerChanged += CosinussDevice_AccelerometerChanged;
+    }
+}
 ```
