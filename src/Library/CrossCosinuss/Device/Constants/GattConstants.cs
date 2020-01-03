@@ -24,6 +24,5 @@ namespace Cosinuss.Library.Device.Constants
         internal static Guid SPO2_UUID = Guid.Parse("00002A5F-0000-1000-8000-00805f9B34fb");
         internal static Guid TEMPERATURE_MEASUREMENT_UUID = Guid.Parse("00002a1c-0000-1000-8000-00805f9b34fb");
         internal static Guid RAW_DATA_UUID = Guid.Parse("0000a001-1212-efde-1523-785feabcd123");
-
     }
 }
