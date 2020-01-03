@@ -1,5 +1,5 @@
 ﻿using cosinuss;
-using Cosinuss.Interfaces;
+using Cosinuss.Library.Device.Interfaces;
 using Plugin.BluetoothLE;
 using System;
 using System.Collections.Generic;

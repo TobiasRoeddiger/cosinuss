@@ -1,11 +1,10 @@
-﻿using cosinuss;
-using Plugin.Permissions;
+﻿using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace example
+namespace Cosinuss.Example
 {
     public partial class App : Application
     {

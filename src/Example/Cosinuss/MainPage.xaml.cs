@@ -1,10 +1,12 @@
-﻿using Cosinuss.Interfaces;
+﻿using Cosinuss.Library.Device.Constants;
+using Cosinuss.Library.Device.Interfaces;
+using Cosinuss.Library.Device.Sensors;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
 using Xamarin.Forms;
 
-namespace example
+namespace Cosinuss.Example
 {
     public partial class MainPage : ContentPage
     {
@@ -41,8 +43,8 @@ namespace example
 
                 if (status == PermissionStatus.Granted)
                 {
-                    Cosinuss.CrossCosinuss.Current.OnDeviceFound += Current_OnDeviceFound;
-                    Cosinuss.CrossCosinuss.Current.StartScanning();
+                    Cosinuss.Library.Cross.Current.OnDeviceFound += Current_OnDeviceFound;
+                    Cosinuss.Library.Cross.Current.StartScanning();
                 }
                 else if (status != PermissionStatus.Unknown)
                 {
@@ -55,50 +57,58 @@ namespace example
             }
         }
 
-        private void Current_OnDeviceFound(object sender, Cosinuss.Interfaces.ICosinussDevice e)
+        private void Current_OnDeviceFound(object sender, ICosinussDevice cosinussDevice)
         {
             // stop scanning after any cosinuss device was found
-            Cosinuss.CrossCosinuss.Current.StopScanning();
-            Cosinuss.CrossCosinuss.Current.OnDeviceFound -= Current_OnDeviceFound;
+            Cosinuss.Library.Cross.Current.StopScanning();
+            Cosinuss.Library.Cross.Current.OnDeviceFound -= Current_OnDeviceFound;
 
             // connect to the cosinuss device
-            e.OnConnectionStateChanged += E_OnConnectionStateChanged;
-            e.Connect();    
+            cosinussDevice.OnConnectionStateChanged += CosinussDevice_OnConnectionStateChanged;
+            cosinussDevice.Connect();    
         }
 
-        private void E_OnConnectionStateChanged(object sender, Cosinuss.ConnectionState e)
+        private void CosinussDevice_OnConnectionStateChanged(object sender, ConnectionState e)
         {
             // TODO: ensure sender type safety
             var cosinussDevice = (ICosinussDevice)sender;
 
-            if (e == Cosinuss.ConnectionState.CONNECTED)
+            if (e == ConnectionState.CONNECTED)
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
+                    this.ConnectingActivityIndicator.IsRunning = false;
                     this.DeviceIdLabel.Text = cosinussDevice.Id;
                     this.DeviceTypeLabel.Text = cosinussDevice.ManufacturerName + " " + cosinussDevice.ModelNumber;
-                    this.SoftwareAndFirmwareLabel.Text = cosinussDevice.SoftwareRevision + " (" + cosinussDevice.FirmwareRevision + ")";
+                    this.SoftwareAndFirmwareLabel.Text = cosinussDevice.SoftwareRevision + " / " + cosinussDevice.FirmwareRevision;
 
-                    cosinussDevice.BatteryLevelChanged += E_BatteryLevelChanged;
-                    cosinussDevice.DataQualityIndexChanged += E_DataQualityIndexChanged;
+                    cosinussDevice.BatteryLevelChanged += CosinussDevice_BatteryLevelChanged;
+                    cosinussDevice.SensorQualityIndexChanged += CosinussDevice_DataQualityIndexChanged;
 
-                    cosinussDevice.BodyTemperatureChanged += E_BodyTemperatureChanged;
-                    cosinussDevice.HeartRateChanged += E_HeartRateChanged;
-                    cosinussDevice.AccelerometerChanged += E_AccelerometerChanged;
+                    cosinussDevice.BodyTemperatureChanged += CosinussDevice_BodyTemperatureChanged;
+                    cosinussDevice.HeartRateChanged += CosinussDevice_HeartRateChanged;
+                    cosinussDevice.SPO2Changed += CosinussDevice_SPO2Changed;
+                    cosinussDevice.AccelerometerChanged += CosinussDevice_AccelerometerChanged;
                 });
             }
-            else if (e == Cosinuss.ConnectionState.DISCONNECTED)
+            else if (e == ConnectionState.DISCONNECTED)
             {
-                cosinussDevice.BatteryLevelChanged -= E_BatteryLevelChanged;
-                cosinussDevice.DataQualityIndexChanged -= E_DataQualityIndexChanged;
+                cosinussDevice.BatteryLevelChanged -= CosinussDevice_BatteryLevelChanged;
+                cosinussDevice.SensorQualityIndexChanged -= CosinussDevice_DataQualityIndexChanged;
 
-                cosinussDevice.BodyTemperatureChanged -= E_BodyTemperatureChanged;
-                cosinussDevice.HeartRateChanged -= E_HeartRateChanged;
-                cosinussDevice.AccelerometerChanged -= E_AccelerometerChanged;
+                cosinussDevice.BodyTemperatureChanged -= CosinussDevice_BodyTemperatureChanged;
+                cosinussDevice.HeartRateChanged -= CosinussDevice_HeartRateChanged;
+                cosinussDevice.AccelerometerChanged -= CosinussDevice_AccelerometerChanged;
+                cosinussDevice.SPO2Changed -= CosinussDevice_SPO2Changed;
             }
         }
 
-        private void E_BatteryLevelChanged(object sender, short e)
+        private void CosinussDevice_SPO2Changed(object sender, float e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CosinussDevice_BatteryLevelChanged(object sender, short e)
         {
             Device.BeginInvokeOnMainThread(() =>
             {
@@ -106,20 +116,20 @@ namespace example
             });
         }
 
-        private void E_AccelerometerChanged(object sender, Cosinuss.Accelerometer e)
+        private void CosinussDevice_AccelerometerChanged(object sender, Accelerometer e)
         {
             // throw new NotImplementedException();
         }
 
-        private void E_BodyTemperatureChanged(object sender, double e)
+        private void CosinussDevice_BodyTemperatureChanged(object sender, double e)
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                BodyTemperatureValueLabel.Text = Math.Round(e, 2) + "°";
+                BodyTemperatureValueLabel.Text = e + " °C";
             });
         }
 
-        private void E_DataQualityIndexChanged(object sender, byte e)
+        private void CosinussDevice_DataQualityIndexChanged(object sender, byte e)
         {
             Device.BeginInvokeOnMainThread(() =>
             {
@@ -127,7 +137,7 @@ namespace example
             });
         }
 
-        private void E_HeartRateChanged(object sender, float e)
+        private void CosinussDevice_HeartRateChanged(object sender, float e)
         {
             Device.BeginInvokeOnMainThread(() =>
             {

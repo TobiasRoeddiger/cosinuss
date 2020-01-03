@@ -17,6 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Cosinuss\Cosinuss.csproj" />
+    <ProjectReference Include="..\..\Library\CrossCosinuss\Cross.csproj" />
   </ItemGroup>
 </Project>

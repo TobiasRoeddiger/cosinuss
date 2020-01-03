@@ -1,4 +1,4 @@
-﻿namespace Cosinuss
+﻿namespace Cosinuss.Library.Device.Sensors
 {
     public class Accelerometer
     {

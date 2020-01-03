@@ -1,9 +1,9 @@
-﻿using Cosinuss.Interfaces;
+﻿using Cosinuss.Library.Device.Interfaces;
 using System;
 
-namespace Cosinuss
+namespace Cosinuss.Library
 {
-    public class CrossCosinuss
+    public class Cross
     {
         private static readonly Lazy<ICosinussDeviceManager> implementation = new Lazy<ICosinussDeviceManager>(CreateCosinussDeviceManager, System.Threading.LazyThreadSafetyMode.PublicationOnly);
         public static ICosinussDeviceManager Current
@@ -27,7 +27,7 @@ namespace Cosinuss
             return new CosinussDeviceManager();
         }
 
-        private CrossCosinuss()
+        private Cross()
         {
 
         }

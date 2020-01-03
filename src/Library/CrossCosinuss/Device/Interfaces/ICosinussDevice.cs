@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Cosinuss.Library.Device.Constants;
+using Cosinuss.Library.Device.Sensors;
+using System;
 
-namespace Cosinuss.Interfaces
+namespace Cosinuss.Library.Device.Interfaces
 {
     public interface ICosinussDevice
     {
@@ -22,8 +22,8 @@ namespace Cosinuss.Interfaces
         short BatteryLevel { get; }
         event EventHandler<short> BatteryLevelChanged;
 
-        byte DataQualityIndex { get; }
-        event EventHandler<byte> DataQualityIndexChanged;
+        byte SensorQualityIndex { get; }
+        event EventHandler<byte> SensorQualityIndexChanged;
 
         /**
          * SENSOR READINGS
@@ -34,6 +34,9 @@ namespace Cosinuss.Interfaces
         float HeartRate { get; }
         event EventHandler<float> HeartRateChanged;
 
+        float SPO2 { get; }
+        event EventHandler<float> SPO2Changed;
+
         Accelerometer Accelerometer { get; }
         event EventHandler<Accelerometer> AccelerometerChanged;
 
@@ -41,7 +44,5 @@ namespace Cosinuss.Interfaces
          * DEVICE CONTROL
          */
         void Connect();
-
-        void Disconnect();
     }
 }
