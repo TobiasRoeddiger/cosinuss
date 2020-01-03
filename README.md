@@ -12,7 +12,7 @@ Third-party .NET library to read raw sensor data from the cosinuss° One Bluetoo
 | Device Information | ✅  |
 | Heart Rate  |  ✅ |
 | Body Temperature  | ✅  |
-| Data Quality Index | ✅  |
+| Sensor Quality Index | ✅  |
 | Accelerometer | ❌  |
 | SPO2 | ❌  |
 
