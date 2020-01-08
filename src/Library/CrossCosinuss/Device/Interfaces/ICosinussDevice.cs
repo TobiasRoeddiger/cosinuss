@@ -40,6 +40,9 @@ namespace Cosinuss.Library.Device.Interfaces
         Accelerometer Accelerometer { get; }
         event EventHandler<Accelerometer> AccelerometerChanged;
 
+        byte StepFrequency { get; }
+        event EventHandler<byte> StepFrequencyChanged;
+
         /** 
          * DEVICE CONTROL
          */

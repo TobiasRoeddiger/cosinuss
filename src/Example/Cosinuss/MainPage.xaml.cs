@@ -4,6 +4,7 @@ using Cosinuss.Library.Device.Sensors;
 using Plugin.Permissions;
 using Plugin.Permissions.Abstractions;
 using System;
+using System.Globalization;
 using Xamarin.Forms;
 
 namespace Cosinuss.Example
@@ -89,6 +90,7 @@ namespace Cosinuss.Example
                     cosinussDevice.HeartRateChanged += CosinussDevice_HeartRateChanged;
                     cosinussDevice.SPO2Changed += CosinussDevice_SPO2Changed;
                     cosinussDevice.AccelerometerChanged += CosinussDevice_AccelerometerChanged;
+                    cosinussDevice.StepFrequencyChanged += CosinussDevice_StepFrequencyChanged;
                 });
             }
             else if (e == ConnectionState.DISCONNECTED)
@@ -103,6 +105,14 @@ namespace Cosinuss.Example
             }
         }
 
+        private void CosinussDevice_StepFrequencyChanged(object sender, byte e)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                StepFrequencyLabel.Text = e + " spm";
+            });
+        }
+
         private void CosinussDevice_SPO2Changed(object sender, float e)
         {
             throw new NotImplementedException();
@@ -112,13 +122,26 @@ namespace Cosinuss.Example
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                BatteryPercentageLabel.Text = e + "%";
+                BatteryPercentageLabel.Text = e + " %";
             });
         }
 
+        private readonly NumberFormatInfo numberFormat = new NumberFormatInfo
+        {
+            NumberDecimalSeparator = ".",
+        };
         private void CosinussDevice_AccelerometerChanged(object sender, Accelerometer e)
         {
-            // throw new NotImplementedException();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                this.XProgressBar.Progress = (e.X + 1f) / 2f;
+                this.YProgressBar.Progress = (e.Y + 1f) / 2f;
+                this.ZProgressBar.Progress = (e.Z + 1f) / 2f;
+
+                this.XValueLabel.Text = ((e.X >= 0) ? "+" : "") + Math.Round(e.X, 4).ToString("0.0000", numberFormat);
+                this.YValueLabel.Text = ((e.Y >= 0) ? "+" : "") + Math.Round(e.Y, 4).ToString("0.0000", numberFormat);
+                this.ZValueLabel.Text = ((e.Z >= 0) ? "+" : "") + Math.Round(e.Z, 4).ToString("0.0000", numberFormat);
+            });
         }
 
         private void CosinussDevice_BodyTemperatureChanged(object sender, double e)

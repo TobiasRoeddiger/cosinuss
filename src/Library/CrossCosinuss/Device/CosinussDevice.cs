@@ -3,8 +3,12 @@ using Cosinuss.Library.Device.Constants;
 using Cosinuss.Library.Device.Interfaces;
 using Cosinuss.Library.Device.Sensors;
 using Cosinuss.Library.Device.Sensors.Conversion;
+using Cross.Device.Sensors.Conversion;
 using Plugin.BluetoothLE;
 using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
 
 namespace cosinuss
 {
@@ -216,6 +220,24 @@ namespace cosinuss
         }
         public event EventHandler<Accelerometer> AccelerometerChanged;
 
+        private byte _stepFrequency;
+        public byte StepFrequency
+        {
+            get
+            {
+                return this._stepFrequency;
+            }
+            set
+            {
+                if (_stepFrequency != value)
+                {
+                    this._stepFrequency = value;
+                    StepFrequencyChanged?.Invoke(this, _stepFrequency);
+                }
+            }
+        }
+        public event EventHandler<byte> StepFrequencyChanged;
+
         /*
          * CONVERSION STRATEGIES
          */
@@ -224,12 +246,14 @@ namespace cosinuss
         private readonly TemperatureConversionStrategy _temperatureConversion = new TemperatureConversionStrategy();
         private readonly HeartRateConversionStrategy _heartRateConversion = new HeartRateConversionStrategy();
         private readonly ByteConversionStrategy _byteConversion = new ByteConversionStrategy();
+        private readonly RawDataConversionStrategy _rawConversion = new RawDataConversionStrategy();
 
         /*
          * INTERNAL BLUETOOTH COMMUNICATION
          */
         private readonly IDevice _internalDevice;
         private bool _bluetoothObserversConfigured = false;
+        private readonly byte[] RAW_DATA_KEY = new byte[] { 0x32, 0x31, 0x39, 0x32, 0x37, 0x34, 0x31, 0x30, 0x35, 0x39, 0x35, 0x35, 0x30, 0x32, 0x34, 0x35 };
 
         public CosinussDevice(IDevice internalDevice)
         {
@@ -311,9 +335,25 @@ namespace cosinuss
                 characteristic.RegisterAndNotify(true).Subscribe(result => BodyTemperature = _temperatureConversion.Convert(result.Data));
             else if (characteristic.Uuid == GattConstants.SENSOR_QUALITY_INDEX_UUID)
                 characteristic.RegisterAndNotify().Subscribe(result => SensorQualityIndex = _byteConversion.Convert(result.Data));
-        }
 
-        
+            /*
+             * Write Raw Data Characteristic and Start Notify
+             */
+            if (characteristic.Uuid == GattConstants.RAW_DATA_UUID)
+            {
+                var rawDataCharacteristic = characteristic;
+                characteristic.Write(RAW_DATA_KEY).Subscribe(result =>
+                {
+                    rawDataCharacteristic.RegisterAndNotify().Subscribe(notifyResult =>
+                    {
+                        var convertedRawData = _rawConversion.Convert(notifyResult.Data);
+
+                        if (convertedRawData.StepFrequency != null) this.StepFrequency = convertedRawData.StepFrequency ?? this.StepFrequency;
+                        if (convertedRawData.Accelerometer != null) this.Accelerometer = convertedRawData.Accelerometer;
+                    });
+                });
+            }
+        }
 
         private void CheckConnected()
         {

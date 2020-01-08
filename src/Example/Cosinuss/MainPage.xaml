@@ -75,18 +75,51 @@
 
         <BoxView Margin="-15, 0, -15, 0" HeightRequest="0.2" HorizontalOptions="FillAndExpand" Opacity="0.3" BackgroundColor="White"></BoxView>
 
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0.2" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackLayout Orientation="Vertical" Padding="10" Spacing="10" HorizontalOptions="Center">
+                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Orientation="Horizontal">
+                    <Label x:Name="StepFrequencyLabel" Text="-" FontAttributes="Bold" TextColor="White"></Label>
+                </StackLayout>
+                <StackLayout>
+                    <Label Text="STEP FREQUENCY" FontAttributes="Bold" FontSize="Small" Opacity="0.5" TextColor="White"></Label>
+                </StackLayout>
+
+            </StackLayout>
+
+            <BoxView Grid.Column="1" Margin="0, -10, 0, -10" WidthRequest="0.2" VerticalOptions="FillAndExpand" HorizontalOptions="Center" Opacity="0.3" BackgroundColor="White"></BoxView>
+
+            <StackLayout Grid.Column="2" Orientation="Vertical" Padding="10" Spacing="10" HorizontalOptions="Center">
+                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Orientation="Horizontal">
+                    <Label x:Name="TimeLabel" Text="-" FontAttributes="Bold" TextColor="White"></Label>
+                </StackLayout>
+                <StackLayout>
+                    <Label Text="TIME" FontAttributes="Bold" FontSize="Small" Opacity="0.5" TextColor="White"></Label>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+
+        <BoxView Margin="-15, 0, -15, 0" HeightRequest="0.2" HorizontalOptions="FillAndExpand" Opacity="0.3" BackgroundColor="White"></BoxView>
+
         <StackLayout Padding="10">
             <StackLayout Orientation="Horizontal" Spacing="15">
                 <Label Text="X" TextColor="White" VerticalOptions="Center"></Label>
-                <ProgressBar Progress="0.89" ProgressColor="#01DAF3" HorizontalOptions="FillAndExpand" VerticalOptions="Center"></ProgressBar>
+                <ProgressBar x:Name="XProgressBar" Progress="0.5" ProgressColor="#01DAF3" HorizontalOptions="FillAndExpand" VerticalOptions="Center"></ProgressBar>
+                <Label x:Name="XValueLabel" Text="0.0000" TextColor="White" FontAttributes="Bold"></Label>
             </StackLayout>
             <StackLayout Orientation="Horizontal" Spacing="15">
                 <Label Text="Y" TextColor="White" VerticalOptions="Center"></Label>
-                <ProgressBar Progress="0.5" ProgressColor="#01DAF3" HorizontalOptions="FillAndExpand" VerticalOptions="Center"></ProgressBar>
+                <ProgressBar x:Name="YProgressBar" Progress="0.5" ProgressColor="#01DAF3" HorizontalOptions="FillAndExpand" VerticalOptions="Center"></ProgressBar>
+                <Label x:Name="YValueLabel" Text="0.0000" TextColor="White" FontAttributes="Bold"></Label>
             </StackLayout>
             <StackLayout Orientation="Horizontal" Spacing="15">
                 <Label Text="Z" TextColor="White" VerticalOptions="Center"></Label>
-                <ProgressBar Progress="0.73" ProgressColor="#01DAF3" HorizontalOptions="FillAndExpand" VerticalOptions="Center"></ProgressBar>
+                <ProgressBar x:Name="ZProgressBar" Progress="0.5" ProgressColor="#01DAF3" HorizontalOptions="FillAndExpand" VerticalOptions="Center"></ProgressBar>
+                <Label HorizontalOptions="End" x:Name="ZValueLabel" Text="0.0000" TextColor="White" FontAttributes="Bold"></Label>
             </StackLayout>
             <Label Text="ACCELEROMETER" FontAttributes="Bold" FontSize="Small" Opacity="0.5" TextColor="White" HorizontalOptions="Center"></Label>
         </StackLayout>
