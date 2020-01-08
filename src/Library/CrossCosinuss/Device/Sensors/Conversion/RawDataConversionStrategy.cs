@@ -14,21 +14,21 @@ namespace Cross.Device.Sensors.Conversion
         private const int ACC_Y_INDEX = 16;
         private const int ACC_Z_INDEX = 14; //correct
 
-        private const int COUNT_INDEX = 12;
+        private const int ACC_MIN = 225;
+        private const int ACC_MAX = 30;
+        private const int ACC_ZERO = 0;
+
+        //private const int COUNT_INDEX = 12; not needed for now
 
         private const int STEP_FREQUENCY_INDEX = 7;
 
         public DecodedRawData Convert(byte[] byteArray)
         {
-            var max = 30;
-            var min = 255;
             _eventConversionCounter++;
 
-            Console.WriteLine(BitConverter.ToString(new byte[] { byteArray[14] }) + ", " + BitConverter.ToString(new byte[] { byteArray[16] }) + ", " + BitConverter.ToString(new byte[] { byteArray[18] }));
-
-            var acc_x = byteArray[ACC_X_INDEX] & 255; //-1f + (byteArray[ACC_X_INDEX] / 128f);
-            var acc_y = byteArray[ACC_Y_INDEX] & 255; //-1f + (byteArray[ACC_Y_INDEX] / 128f);
-            var acc_z = byteArray[ACC_Z_INDEX] & 255; //-1f + (byteArray[ACC_Z_INDEX] / 128f);
+            var acc_x = ByteToRawAcceleration(byteArray[ACC_X_INDEX]) / 30f;
+            var acc_y = ByteToRawAcceleration(byteArray[ACC_Y_INDEX]) / 30f;
+            var acc_z = ByteToRawAcceleration(byteArray[ACC_Z_INDEX]) / 30f;
             var accelerometer = new Accelerometer(acc_x, acc_y, acc_z);
 
             if (_eventConversionCounter >= 50)
@@ -40,6 +40,20 @@ namespace Cross.Device.Sensors.Conversion
             }
 
             return new DecodedRawData(accelerometer);
+        }
+
+        private float ByteToRawAcceleration(byte value)
+        {
+            if (value >= ACC_MIN)
+                return value - ACC_MIN;
+
+            if (value == ACC_ZERO)
+                return ACC_ZERO;
+
+            if (value <= ACC_MAX)
+                return value;
+
+            return ACC_ZERO;
         }
     }
 
