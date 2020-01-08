@@ -12,19 +12,22 @@ Third-party .NET library to read raw sensor data from the cosinuss° One Bluetoo
 | Device Information | ✅  | ✅  | [1] |
 | Heart Rate  |  ✅ | ✅  | [1] |
 | Body Temperature  | ✅  | ✅  | [1] |
-| Sensor Quality | ✅  | ✅  | - |
-| Step Frequency | ✅  | ✅  | - |
-| Accelerometer | ✅  | ✅  | - |
+| Sensor Quality | ✅  | ✅  | [2] |
+| Step Frequency | ✅  | ✅  | [2] |
+| Accelerometer | ✅  | ✅  | [2] |
 | SPO2 | ❌  | ❌ | - |
-| Respiration | 🚧 | ❌ | [2] |
+| Respiration | 🚧 | ❌ | [3] |
 
 
 
 [1] Bluetooth SIG, Generic Attribute Profile (GATT), January 2020, [URL](https://www.bluetooth.com/specifications/gatt/)
 
-[2] Röddiger, Tobias, et al. "Towards Respiration Rate Monitoring Using an In-Ear Headphone Inertial
+[2] Reverse-engineered funcationalities. **Use with caution and at your own risk! Correct functionality not guranteed.**
+
+[3] Röddiger, Tobias, et al. "Towards Respiration Rate Monitoring Using an In-Ear Headphone Inertial
 Measurement Unit" International Joint Conference on Pervasive and Ubiquitous Computing (Ubicomp'19), 1st
 International Workshop on Earable Computing Systems. ACM, 2019.
+
 
 ## Sample App
 <img src="https://github.com/TobiasRoeddiger/cosinuss/blob/master/art/info-graphic.png?raw=true" width="600">
