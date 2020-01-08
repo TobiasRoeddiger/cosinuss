@@ -13,11 +13,11 @@ Third-party .NET library to read raw sensor data from the cosinuss° One Bluetoo
 | Heart Rate  |  ✅ |
 | Body Temperature  | ✅  |
 | Sensor Quality | ✅  |
-| Accelerometer | ❌  |
+| Accelerometer | (✅)  |
 | SPO2 | ❌  |
 
 ## Sample App
-<img src="https://github.com/TobiasRoeddiger/cosinuss/blob/master/art/screenshot.jpg?raw=true" width="300">
+<img src="https://github.com/TobiasRoeddiger/cosinuss/blob/master/art/info-graphic.png?raw=true" width="600">
 
 
 ## Supported Platforms
