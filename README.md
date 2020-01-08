@@ -7,17 +7,27 @@
  
 Third-party .NET library to read raw sensor data from the cosinuss° One Bluetooth earables (work in progress). NuGet publication pending.
 
-| Feature  | Supported |
-| ------------- | :-------------: |
-| Device Information | ✅  |
-| Heart Rate  |  ✅ |
-| Body Temperature  | ✅  |
-| Sensor Quality | ✅  |
-| Accelerometer | ❌  |
-| SPO2 | ❌  |
+| Feature  | Supported | Native API | Reference |
+| ------------- | :-------------: | :-------------: |:-------------: |
+| Device Information | ✅  | ✅  | [1] |
+| Heart Rate  |  ✅ | ✅  | [1] |
+| Body Temperature  | ✅  | ✅  | [1] |
+| Sensor Quality | ✅  | ✅  | - |
+| Step Frequency | ✅  | ✅  | - |
+| Accelerometer | 🚧  | ✅  | - |
+| SPO2 | ❌  | ❌ | - |
+| Respiration | 🚧 | ❌ | [2] |
+
+
+
+[1] Bluetooth SIG, Generic Attribute Profile (GATT), January 2020, [URL](https://www.bluetooth.com/specifications/gatt/)
+
+[2] Röddiger, Tobias, et al. "Towards Respiration Rate Monitoring Using an In-Ear Headphone Inertial
+Measurement Unit" International Joint Conference on Pervasive and Ubiquitous Computing (Ubicomp'19), 1st
+International Workshop on Earable Computing Systems. ACM, 2019.
 
 ## Sample App
-<img src="https://github.com/TobiasRoeddiger/cosinuss/blob/master/art/screenshot.jpg?raw=true" width="300">
+<img src="https://github.com/TobiasRoeddiger/cosinuss/blob/master/art/info-graphic.png?raw=true" width="600">
 
 
 ## Supported Platforms
