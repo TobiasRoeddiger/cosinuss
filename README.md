@@ -14,7 +14,7 @@ Third-party .NET library to read raw sensor data from the cosinuss° One Bluetoo
 | Body Temperature  | ✅  | ✅  | [1] |
 | Sensor Quality | ✅  | ✅  | - |
 | Step Frequency | ✅  | ✅  | - |
-| Accelerometer | 🚧  | ✅  | - |
+| Accelerometer | ✅  | ✅  | - |
 | SPO2 | ❌  | ❌ | - |
 | Respiration | 🚧 | ❌ | [2] |
 
