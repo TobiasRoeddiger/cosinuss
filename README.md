@@ -7,14 +7,19 @@
  
 Third-party .NET library to read raw sensor data from the cosinuss° One Bluetooth earables (work in progress). NuGet publication pending.
 
-| Feature  | Supported |
-| ------------- | :-------------: |
-| Device Information | ✅  |
-| Heart Rate  |  ✅ |
-| Body Temperature  | ✅  |
-| Sensor Quality | ✅  |
-| Accelerometer | (✅)  |
-| SPO2 | ❌  |
+| Feature  | Supported | Native API |
+| ------------- | :-------------: | :-------------: |
+| Device Information | ✅  | ✅  |
+| Heart Rate  |  ✅ | ✅  |
+| Body Temperature  | ✅  | ✅  |
+| Sensor Quality | ✅  | ✅  |
+| Accelerometer | 🚧  | ✅  |
+| SPO2 | ❌  | ❌ |
+| Respiration | 🚧 [1] | ❌ |
+
+[1] Röddiger, Tobias, et al. "Towards Respiration Rate Monitoring Using an In-Ear Headphone Inertial
+Measurement Unit" International Joint Conference on Pervasive and Ubiquitous Computing (Ubicomp'19), 1st
+International Workshop on Earable Computing Systems. ACM, 2019.
 
 ## Sample App
 <img src="https://github.com/TobiasRoeddiger/cosinuss/blob/master/art/info-graphic.png?raw=true" width="600">
