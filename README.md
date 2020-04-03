@@ -1,6 +1,5 @@
 ﻿# cosinuss° One Library
 ![Build Passing](https://img.shields.io/badge/build-passing-success)
-![NuGet Release](https://img.shields.io/nuget/v/cosinuss.NET)
 ![Open Issues](https://img.shields.io/github/issues/TobiasRoeddiger/cosinuss)
 ![Twitter Tobias Röddiger](https://img.shields.io/badge/twitter-%40TobiasRoeddiger-informational)
 
