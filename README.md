@@ -13,10 +13,10 @@ Third-party .NET library to read raw sensor data from the cosinuss° One Bluetoo
 | Body Temperature  | ✅  | ✅  | [1] |
 | Sensor Quality | ✅  | ✅  | [2] |
 | Step Frequency | ✅  | ✅  | [2] |
-| Accelerometer | ❌  | ❌ | - |
-| SPO2 | ❌  | ❌ | - |
-
-
+| Accelerometer X, Y, Z | ❌  | ❌ | [2] |
+| PPG Green | ❌  | ❌ | [2] |
+| PPG Red | ❌  | ❌ | [2] |
+| Ambient Light | ❌  | ❌ | [2] |
 
 [1] Bluetooth SIG, Generic Attribute Profile (GATT), January 2020, [URL](https://www.bluetooth.com/specifications/gatt/)
 
