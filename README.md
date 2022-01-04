@@ -6,7 +6,7 @@
  
 Third-party .NET library to read raw sensor data from the cosinuss° One Bluetooth earables (work in progress). NuGet publication pending.
 
-| Feature  | Supported | GATT API | Reference |
+| Feature  | Supported | BLE GATT API | Reference |
 | ------------- | :-------------: | :-------------: |:-------------: |
 | Device Information | ✅  | ✅  | [1] |
 | Heart Rate  |  ✅ | ✅  | [1] |
@@ -14,7 +14,7 @@ Third-party .NET library to read raw sensor data from the cosinuss° One Bluetoo
 | Sensor Quality | ✅  | ❌  | [2] |
 | Step Frequency | ✅  | ❌  | [2] |
 | Accelerometer X, Y, Z | 🚧  | ❌ | [2] |
-| PPG Green | 🚧  | REvers | [2] |
+| PPG Green | 🚧  | ❌ | [2] |
 | PPG Red | 🚧  | ❌ | [2] |
 | Ambient Light | 🚧  | ❌ | [2] |
 
